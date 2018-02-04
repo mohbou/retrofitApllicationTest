@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<GithubRepo>> call, Throwable t) {
-                //Toast.makeText(this, "Error getting repos " + t.getMessage(), Toast.LENGTH_SHORT).show();
+
                 Toast.makeText(MainActivity.this, "Error getting repos " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
