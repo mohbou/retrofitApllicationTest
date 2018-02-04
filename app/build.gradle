@@ -32,7 +32,7 @@ dependencies {
 
     //gson
     implementation 'com.google.code.gson:gson:2.8.2'
-    compile 'com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.2.0'
+    implementation 'com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.6.0'
 
     //okhttp
     implementation 'com.squareup.okhttp3:logging-interceptor:3.8.0'

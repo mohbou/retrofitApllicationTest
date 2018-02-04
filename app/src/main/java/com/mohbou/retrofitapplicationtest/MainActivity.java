@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
 
     Call<List<GithubRepo>> reposCall;
 
+    Call<List<GithubRepo>> reposmohbou;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +48,24 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Error getting repos " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+
+        reposmohbou = mApiService.getReposForUser("mohbou");
+
+        reposmohbou.enqueue(new Callback<List<GithubRepo>>() {
+            @Override
+            public void onResponse(Call<List<GithubRepo>> call, Response<List<GithubRepo>> response) {
+                final List<GithubRepo> body = response.body();
+                body.stream()
+                        .forEach((githubRepo) ->Log.d("result", "onResponse repo for mohbou: "+githubRepo.name));
+            }
+
+            @Override
+            public void onFailure(Call<List<GithubRepo>> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Error getting repos for mohbou " + t.getMessage(), Toast.LENGTH_LONG).show();
+                Log.d("result", "onFailure: "+t.getMessage());
+            }
+        });
+
     }
 
     @Override
@@ -53,6 +73,9 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         if(reposCall != null) {
             reposCall.cancel();
+        }
+        if(reposmohbou != null) {
+            reposmohbou.cancel();
         }
     }
 }
