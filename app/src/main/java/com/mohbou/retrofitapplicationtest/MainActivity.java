@@ -13,69 +13,60 @@ import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
+import io.reactivex.disposables.CompositeDisposable;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainActivityMVP.View {
 
     @Inject
     ApiService mApiService;
 
-    Call<List<GithubRepo>> reposCall;
+    @Inject
+    MainActivityMVP.Presenter presenter;
 
-    Call<List<GithubRepo>> reposmohbou;
+    @Inject
+    CompositeDisposable mCompositeDisposable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ((App)getApplication()).getComponent().inject(this);
+        ((App) getApplication()).getComponent().inject(this);
 
-        reposCall = mApiService.getAllRepos();
+    }
 
-        reposCall.enqueue(new Callback<List<GithubRepo>>() {
-            @Override
-            public void onResponse(Call<List<GithubRepo>> call, Response<List<GithubRepo>> response) {
-                final List<GithubRepo> body = response.body();
-                body.stream()
-                    .forEach((githubRepo) ->Log.d("result", "onResponse: "+githubRepo.fullName));
-            }
-
-            @Override
-            public void onFailure(Call<List<GithubRepo>> call, Throwable t) {
-
-                Toast.makeText(MainActivity.this, "Error getting repos " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        reposmohbou = mApiService.getReposForUser("mohbou");
-
-        reposmohbou.enqueue(new Callback<List<GithubRepo>>() {
-            @Override
-            public void onResponse(Call<List<GithubRepo>> call, Response<List<GithubRepo>> response) {
-                final List<GithubRepo> body = response.body();
-                body.stream()
-                        .forEach((githubRepo) ->Log.d("result", "onResponse repo for mohbou: "+githubRepo.name));
-            }
-
-            @Override
-            public void onFailure(Call<List<GithubRepo>> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Error getting repos for mohbou " + t.getMessage(), Toast.LENGTH_LONG).show();
-                Log.d("result", "onFailure: "+t.getMessage());
-            }
-        });
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.setView(this);
+        presenter.setApi(mApiService);
+        presenter.setDisposable(mCompositeDisposable);
+        presenter.showAllRepos();
+        presenter.showUserRepos("mohbou");
 
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(reposCall != null) {
-            reposCall.cancel();
-        }
-        if(reposmohbou != null) {
-            reposmohbou.cancel();
-        }
+        presenter.dispose();
+    }
+
+    @Override
+    public void showAllRepos(List<GithubRepo> repos) {
+        repos.stream().forEach((githubRepo) -> Log.d("result", "All repos: " + githubRepo.name));
+
+    }
+
+    @Override
+    public void showUserRepos(List<GithubRepo> repos) {
+        repos.stream().forEach((githubRepo) -> Log.d("result", "user repos: " + githubRepo.name));
+    }
+
+    @Override
+    public void showError() {
+ // future update
     }
 }
