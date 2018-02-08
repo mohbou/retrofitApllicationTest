@@ -20,8 +20,6 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements MainActivityMVP.View {
 
-    @Inject
-    ApiService mApiService;
 
     @Inject
     MainActivityMVP.Presenter presenter;
@@ -41,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
     protected void onResume() {
         super.onResume();
         presenter.setView(this);
-        presenter.setApi(mApiService);
         presenter.setDisposable(mCompositeDisposable);
         presenter.showAllRepos();
         presenter.showUserRepos("mohbou");

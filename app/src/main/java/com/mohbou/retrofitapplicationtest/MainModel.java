@@ -15,6 +15,10 @@ public class MainModel implements MainActivityMVP.Model {
 
     List<GithubRepo> reposCall;
 
+    public MainModel(ApiService apiService) {
+        mApiService = apiService;
+    }
+
     @Override
     public Single<List<GithubRepo>> allRepos() {
         reposCall = null;
@@ -36,8 +40,5 @@ public class MainModel implements MainActivityMVP.Model {
         });
     }
 
-    @Override
-    public void setApi(ApiService api) {
-        mApiService = api;
-    }
+
 }

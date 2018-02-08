@@ -81,9 +81,5 @@ public class MainActivityPresenter implements MainActivityMVP.Presenter {
         this.mCompositeDisposable = mCompositeDisposable;
     }
 
-    @Override
-    public void setApi(ApiService api) {
-        model.setApi(api);
-    }
 
 }

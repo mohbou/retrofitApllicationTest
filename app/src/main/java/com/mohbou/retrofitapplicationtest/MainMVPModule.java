@@ -1,11 +1,13 @@
 package com.mohbou.retrofitapplicationtest;
 
 
+import com.mohbou.retrofitapplicationtest.network.ApiService;
+
 import dagger.Module;
 import dagger.Provides;
 import io.reactivex.disposables.CompositeDisposable;
 
-@Module
+@Module(includes = ApiModule.class)
 public class MainMVPModule {
 
     @Provides
@@ -14,8 +16,8 @@ public class MainMVPModule {
     }
 
     @Provides
-    public MainActivityMVP.Model provideModel() {
-        return new MainModel();
+    public MainActivityMVP.Model provideModel(ApiService apiService) {
+        return new MainModel(apiService);
     }
 
     @Provides

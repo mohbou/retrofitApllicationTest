@@ -22,12 +22,12 @@ public interface MainActivityMVP {
         void showUserRepos(String name);
         void dispose();
         void setDisposable(CompositeDisposable mCompositeDisposable);
-        void setApi(ApiService api);
+
     }
 
     interface Model {
         Single<List<GithubRepo>> allRepos();
         Single<List<GithubRepo>> userRepos(String username);
-        void setApi(ApiService api);
+
     }
 }
